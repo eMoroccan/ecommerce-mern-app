@@ -24,7 +24,7 @@ export default function Navbar() {
                     </button>
                     <button className="btn position-relative">
                         <i class="fa fa-shopping-cart"></i>
-                        <span className="badge bg-secondary start-100 top-0 position-absolute translate-middle">0</span>
+                        <span className="badge primary-color start-100 top-0 position-absolute translate-middle">0</span>
                     </button>
                     <button className="btn position-relative">
                         <i class="fa fa-user"></i>              

@@ -10,16 +10,16 @@ export default function FeaturedProducts() {
             <h5 className="text-uppercase text-center" style={{fontWeight: "lighter", letterSpacing: "2px"}}>Featured Products</h5>
             <div className="container pt-3">
                 <div className="row">
-                    <div className="col-md">
+                    <div className="featured-col">
                         <FeaturedProd FeaturedProdCover={FeaturedProdCover} FeaturedProdName={FeaturedProdName} FeaturedProdPrice={FeaturedProdPrice} />
                     </div>
-                    <div className="col-md">
+                    <div className="featured-col">
                         <FeaturedProd FeaturedProdCover={FeaturedProdCover} FeaturedProdName={FeaturedProdName} FeaturedProdPrice={FeaturedProdPrice} />
                     </div>
-                    <div className="col-md">
+                    <div className="featured-col">
                         <FeaturedProd FeaturedProdCover={FeaturedProdCover} FeaturedProdName={FeaturedProdName} FeaturedProdPrice={FeaturedProdPrice} />
                     </div>
-                    <div className="col-md">
+                    <div className="featured-col">
                         <FeaturedProd FeaturedProdCover={FeaturedProdCover} FeaturedProdName={FeaturedProdName} FeaturedProdPrice={FeaturedProdPrice} />
                     </div>
                 </div>

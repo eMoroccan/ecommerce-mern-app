@@ -7,7 +7,7 @@ export default function Category({cover, description, categoryName, categoryRout
             <div className="card-body ps-0">
                 <h5 className="card-title text-uppercase">{categoryName}'s glasses collection</h5> 
                 <p className="card-text"> {description} </p>
-                <Link to={categoryRoute} className="btn btn-secondary text-uppercase px-3 rounded-0">{categoryName} Shop</Link>
+                <Link to={categoryRoute} className="btn btn-secondary text-uppercase px-3 rounded-0 cat-btn primary-color">{categoryName} Shop</Link>
             </div>
         </div>
     )
