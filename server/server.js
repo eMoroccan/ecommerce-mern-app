@@ -6,6 +6,8 @@ const app = express();
 const productsRoutes = require('./routes/products');
 const categoriesRoutes = require('./routes/categories');
 const usersRoutes = require('./routes/users');
+const cartsRoutes = require('./routes/carts');
+
 
 
 
@@ -24,6 +26,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 });
 
 app.use('/api/products', productsRoutes);
-app.use('/api/products', usersRoutes);
+app.use('/api/carts', cartsRoutes);
+app.use('/api/users', usersRoutes);
 app.use('/api/categories', categoriesRoutes);
 
