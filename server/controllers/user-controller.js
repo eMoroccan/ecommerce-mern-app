@@ -81,10 +81,28 @@ const userUpdater = async (req, res) => {
     }
 }
 
+const setAdmin = async (req, res) => {
+    const {id} = req.params;
+
+    const user = await User.findById(id);
+    if (!user) {
+        return res.status(404).json({status: "error", error: "No such user"});
+    }
+    try {
+        user.admin = true;
+        await user.save();
+        res.status(200).json({status: "ok"});
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({status: "error", error: "There was an error while updating the use"})
+    }
+}
+
 module.exports = {
     listUsers,
     userCreator,
     userFinder,
     userDeletor,
-    userUpdater 
+    userUpdater,
+    setAdmin
 };
