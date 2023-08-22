@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 const productsRoutes = require('./routes/products');
 const categoriesRoutes = require('./routes/categories');
+const usersRoutes = require('./routes/users');
+
 
 
 app.use((req, res, next) => {
@@ -22,5 +24,6 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 });
 
 app.use('/api/products', productsRoutes);
+app.use('/api/products', usersRoutes);
 app.use('/api/categories', categoriesRoutes);
 
