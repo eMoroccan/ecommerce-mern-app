@@ -17,9 +17,8 @@ const productsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Mixed,
         required: true
     },
-    categoryId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'categories',
+    categoryName: {
+        type: String,
         required: true
     },
     colors: [{

@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import ShowcaseCard from "./showcase-card";
+import { useLocation } from 'react-router-dom';
 
 export default function Showcase({filters}) {
+    const location = useLocation().pathname;
+    const removeFirstLetter = (str) => {
+        return str.substring(1);
+      };
     const [products, setProducts] = useState(null);
     const [loading, setLoading] = useState(true);
-  
+
     useEffect(() => {
       const fetchProducts = async () => {
         setLoading(true); // Set loading to true before fetching data
-  
+
         try {
           const response = await fetch("/api/products/get-all");
           const json = await response.json();
-  
+
           if (response.ok) {
             // Filter the products based on the filters object
             const filteredProducts = json.filter((product) => {
@@ -20,7 +25,7 @@ export default function Showcase({filters}) {
               if (filters.price && product.price > filters.price) {
                 return false;
               }
-  
+
               // Apply the color filter
               if (
                 filters.color.length > 0 &&
@@ -30,7 +35,11 @@ export default function Showcase({filters}) {
               ) {
                 return false;
               }
-  
+
+              if (removeFirstLetter(location) !== product.categoryName) {
+                return false;
+              }
+
               // Apply the size filter
               if (
                 filters.size.length > 0 &&
@@ -38,21 +47,21 @@ export default function Showcase({filters}) {
               ) {
                 return false;
               }
-  
+
               return true;
             });
-  
+
             setProducts(filteredProducts);
           }
         } catch (error) {
           console.error("Error fetching products:", error);
         } finally {
-          setLoading(false); // Set loading to false after fetching data
+          setLoading(false);
         }
       };
-  
+
       fetchProducts();
-    }, [filters]);
+    }, [filters, location]);
 
     return (
         <div className="col-md-9">
@@ -61,7 +70,7 @@ export default function Showcase({filters}) {
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-        </div> // Display the loader while loading
+        </div>
         ) : (
           <div className="jiMoro-grid">
             {products &&

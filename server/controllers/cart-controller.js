@@ -3,37 +3,46 @@ const mongoose = require('mongoose');
 
 const createCart = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { id } = req.params;
 
-    const existingCart = await Cart.findOne({ userId });
+    const existingCart = await Cart.findOne({ customerId: id });
 
     if (existingCart) {
       return res.status(400).json({ status: "error", error: 'Cart already exists for this user' });
     }
 
     const cart = new Cart({
-      _id: userId,
-      userId,
+      customerId: id,
       count: 0
     });
 
     await cart.save();
 
-    res.status(200).json({status: "ok"}, cart);
+    res.status(200).json({status: "ok"});
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ status: "error", error: 'Internal server error' });
   }
 };
 
+const getAll = async (req, res) => {
+    try {
+        const carts = await Cart.find();
+        res.status(200).json(carts);
+      } catch(error) {
+        console.log(error);
+        res.status(500).json({ status: "error", error: 'Internal server error' });
+      }
+}
+
 const findCartProducts = async (req, res) => {
    try {
         const {id} = req.params;
-        const cartProducts = await Cart.find({userId: id}).populate('productId')
+        const cartProducts = await Cart.find({customerId: id});
         if (!cartProducts) {
           return res.status(404).json({ status: "error", error: 'The cart has no products' });
         }
-        res.status(200).json(cartProducts)
+        res.status(200).json(cartProducts.productsList)
       } catch (error) {
         console.log(error.message)
         res.status(500).json({ status: "error", error: 'Internal server error' });
@@ -42,22 +51,27 @@ const findCartProducts = async (req, res) => {
 
 const addToCart = async (req, res) => {
   try {
-    const { userId, productId, count } = req.body;
+    const { prodId, count } = req.body;
+    const {id} = req.params;
 
-    const cart = await Cart.findOne({ userId });
+    const countN = parseInt(req.body.count, 10);
 
-    if (!cart) {
+    const cartH = await Cart.findOne({ customerId: id });
+
+    if (!cartH) {
       return res.status(404).json({ status: "error", error: 'Cart not found' });
     }
 
-    for (let i = 0; i < count; i++) {
-      cart.productsList.push(productId);  
-    }
-    cart.count += count;
 
-    await cart.save();
 
-    res.status(200).json({ status: "ok" }, cart);
+  cartH.productsList.push(prodId);
+  cartH.count += 1;
+
+
+
+    await cartH.save();
+
+    res.status(200).json(cartH);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ status: "error", error: 'Internal server error' });
@@ -74,8 +88,8 @@ const removeFromCart = async (req, res) => {
       return res.status(404).json({ status: "error", error: 'Cart not found' });
     }
 
-    cart.productsList.pull(productId);  
-    
+    cart.productsList.pull(productId);
+
     cart.count -= 1;
 
     if (cart.count < 0) {
@@ -96,5 +110,6 @@ module.exports = {
     addToCart,
     removeFromCart,
     findCartProducts,
-    createCart
+    createCart,
+    getAll
   };
