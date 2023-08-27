@@ -13,7 +13,6 @@ const createCart = async (req, res) => {
 
     const cart = new Cart({
       customerId: id,
-      count: 0
     });
 
     await cart.save();
@@ -51,25 +50,19 @@ const findCartProducts = async (req, res) => {
 
 const addToCart = async (req, res) => {
   try {
-    const { prodId, count } = req.body;
-    const {id} = req.params;
 
-    const countN = parseInt(req.body.count, 10);
-
-    const cartH = await Cart.findOne({ customerId: id });
+    const cartH = await Cart.findOne({ customerId: req.params.id });
 
     if (!cartH) {
       return res.status(404).json({ status: "error", error: 'Cart not found' });
     }
 
+    await Cart.findOneAndUpdate({customerId: req.params.id}, {
+        "$push": {
+          "productsList": req.body.prod,
+        }
+      })
 
-
-  cartH.productsList.push(prodId);
-  cartH.count += 1;
-
-
-
-    await cartH.save();
 
     res.status(200).json(cartH);
   } catch (error) {
