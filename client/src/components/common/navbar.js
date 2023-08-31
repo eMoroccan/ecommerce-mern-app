@@ -1,11 +1,43 @@
 import {Link} from 'react-router-dom';
+import axios from 'axios';
+import {useEffect, useState} from 'react';
 
 export default function Navbar() {
+  const [prodsInCart, setProdsInCart] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('/api/carts/get-products/ku');
+        const data = res.data.flat();
+        let count = 0;
+
+        data.forEach(prod => {
+          count += prod.quantity;
+        });
+
+        if (count !== prodsInCart) {
+          setProdsInCart(count);
+          setLoading(false);
+        }
+      } catch (err) {
+        setLoading(false);
+        console.log(err.message);
+      }
+    };
+    fetchData();
+  }, [prodsInCart])
+
     return (
         <nav className="navbar navbar-expand-md py-4 navbar-light bg-light shadow">
             <div className="container">
-                <Link to="/" className="navbar-brand order-md-0">RedAngel</Link>    
-                <div className="collapse navbar-collapse md-order-1">
+                <Link to="/" className="navbar-brand order-md-0">RedAngel</Link>
+                <button className="navbar-toggler order-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse order-cstm" id="navbar">
                     <ul className="navbar-nav mx-auto">
                         <li className="nav-item">
                             <Link to="/men" className="nav-link">Men</Link>
@@ -18,16 +50,23 @@ export default function Navbar() {
                         </li>
                     </ul>
                 </div>
-                <div className="md-order-2">
+                <div className="order-cstm-1">
                     <button className="btn position-relative">
-                        <i class="fa fa-search"></i>
+                        <i className="fa fa-search"></i>
                     </button>
                     <button className="btn position-relative">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span className="badge primary-color start-100 top-0 position-absolute translate-middle">0</span>
+                        <i className="fa fa-shopping-cart"></i>
+                        <span className="badge primary-color start-100 top-0 position-absolute translate-middle">
+                          {loading ? (
+                                <span className="spinner-border" style={{ width: '0.7rem', height: '0.7rem' }}></span>
+                                ) : (
+                                  prodsInCart
+                                )
+                          }
+                        </span>
                     </button>
                     <button className="btn position-relative">
-                        <i class="fa fa-user"></i>              
+                        <Link to="/dashboard" className="nav-link"><i className="fa fa-user"></i></Link>
                     </button>
                 </div>
             </div>

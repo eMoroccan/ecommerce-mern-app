@@ -76,7 +76,7 @@ export default function Showcase({filters}) {
             {products &&
               products.map((product) => (
                 <ShowcaseCard
-                  key={product._id}
+                  prodId={product._id}
                   productSlug={product.slug}
                   productImg={product.cover}
                   productName={product.title}

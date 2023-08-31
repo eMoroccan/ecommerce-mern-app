@@ -13,6 +13,12 @@ const productsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    productImages: [
+      {
+        type: String,
+        required: true
+      }
+    ],
     description: {
         type: mongoose.Schema.Types.Mixed,
         required: true

@@ -2,8 +2,13 @@ import ShopHeader from "./shop-header"
 import { useEffect, useState } from "react"
 import FilterSideBar from './filter-sidebar';
 import Showcase from './products-showcase';
+import { useLocation } from 'react-router-dom';
 
 export default function ShopPage() {
+  const location = useLocation().pathname;
+  const removeFirstLetter = (str) => {
+      return str.substring(1);
+    };
     const [filters, setFilters] = useState({
         price: 5000,
         color: [],
@@ -18,8 +23,8 @@ export default function ShopPage() {
     };
 
     useEffect(() => {
-        document.title = 'Men';
-    }, []);
+        document.title = removeFirstLetter(location);
+    }, [location]);
 
     return (
         <>
@@ -31,7 +36,7 @@ export default function ShopPage() {
                         <Showcase filters={filters} />
                     </div>
                 </div>
-            </div>        
+            </div>
         </>
     )
 }

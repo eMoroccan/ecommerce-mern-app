@@ -10,7 +10,7 @@ router.get('/get-all/', getAll)
 
 router.post('/create/:id', createCart);
 
-router.post('/add-to/:id', express.json(), addToCart);
+router.patch('/add-to/:id', addToCart);
 
 router.patch('/remove-from/:id', removeFromCart);
 
