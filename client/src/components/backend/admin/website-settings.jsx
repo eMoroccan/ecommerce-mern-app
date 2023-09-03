@@ -22,10 +22,15 @@ export default function Settings() {
                                 <label htmlFor="niche">Store niche</label>
                             </div>
                         </div>
-                        <div className="form-floating text-secondary" style={{ fontSize: "13px", fontWeight: "normal" }}>
-                            <textarea className="form-control" id="description" placeholder="Store description" style={{ height: "150px" }}></textarea>
-                        <label htmlFor="description">Store description</label>
+                        <div className="row pt-3 px-0 m-0" >
+                            <div className="col">
+                                <div className="form-floating text-secondary" style={{ fontSize: "13px", fontWeight: "normal" }}>
+                                    <textarea className="form-control" id="description" placeholder="Store description" style={{ height: "150px" }}></textarea>
+                                    <label htmlFor="description">Store description</label>
+                                </div>
+                            </div>
                         </div>
+                       
                         <div className="">
                             <button className="btn btn-primary float-end">Save</button> <br />
                         </div>

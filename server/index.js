@@ -7,6 +7,7 @@ const productsRoutes = require('./routes/products');
 const categoriesRoutes = require('./routes/categories');
 const usersRoutes = require('./routes/users');
 const cartsRoutes = require('./routes/carts');
+const ordersRoutes = require('./routes/orders');
 
 
 
@@ -29,4 +30,5 @@ app.use('/api/products', productsRoutes);
 app.use('/api/carts', cartsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/categories', categoriesRoutes);
+app.use('/api/orders', ordersRoutes);
 

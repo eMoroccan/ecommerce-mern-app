@@ -2,7 +2,7 @@ const User = require('../models/user-schema');
 const mongoose = require('mongoose');
 
 const listUsers = async (req, res) => {
-    const users = await User.find();
+    const users = await User.find({admin: false});
 
     if (!users) {
         return res.status(404).json({status: "error", error: "There is no users yet"})

@@ -10,6 +10,7 @@ import Dashboard from './components/backend/admin/dashboard';
 import ProductsManage from './components/backend/admin/products-page';
 import Customers from './components/backend/admin/customers-page';
 import Settings from './components/backend/admin/website-settings';
+import ProductForm from './components/backend/admin/new-product';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="manage-products" element={<ProductsManage />} />
           <Route path="customers" element={<Customers />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="manage-products/new" element={<ProductForm />} />
         </Route>
         
       </Routes>

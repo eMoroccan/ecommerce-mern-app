@@ -2,7 +2,7 @@ const siteName = "dfg";
 
 export default function Footer() {
     return (
-  <div className="footer border-2 p-3 shadow footer-light border-top" style={{backgroundColor: "whitesmoke"}}>
+  <div className="footer border-2 p-3 shadow footer-light border-top" style={{backgroundColor: "whitesmoke", left: "0", bottom: "0", width: "100%"}}>
     <div className="row container">
       <div className="col">      
             <div className="payment-icons">

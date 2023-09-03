@@ -14,7 +14,7 @@ export default function Sidebar() {
         }
     }
     const active2 = () => {
-        if (location === "/dashboard/products" || location === "/dashboard/products/") {
+        if (location === "/dashboard/manage-products" || location === "/dashboard/manage-products/") {
             return ("active");
         }
     }
@@ -31,7 +31,7 @@ export default function Sidebar() {
     return (
         <div className="container m-0 p-0">
             <Svg />
-            <div className="row vh-100">
+            <div className="row" style={{minHeight: "100vh"}}>
 
            
         <div className="col-md-3 d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sdbar navbar navbar-expand-md">
@@ -68,7 +68,7 @@ export default function Sidebar() {
             </li>
             <li>
                 <Link to="/dashboard/settings" className={"nav-link text-white " + active4()}>
-                <svg className="bi me-2" width="16" height="16"><use xlinkHref="#people-circle"></use></svg>
+                <svg className="bi me-2" width="16" height="16"><use xlinkHref="#gear-fill"></use></svg>
                 Settings
                 </Link>
             </li>

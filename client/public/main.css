@@ -84,7 +84,9 @@ input[type="range"]::-webkit-slider-runnable-track {
     grid-template-columns : 1fr 1fr 1fr;
     grid-gap: 10px;
 }
-
+#multiselectContainerReact > div.optionListContainer{
+  z-index: 99999 !important;
+}
 @media (max-width: 767px) {
     .cat-btn {
       text-align: center;
