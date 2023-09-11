@@ -1,5 +1,8 @@
+require('dotenv').config();
 const User = require('../models/user-schema');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const listUsers = async (req, res) => {
     const users = await User.find({admin: false});
@@ -27,14 +30,24 @@ const userFinder = async (req, res) => {
 }
 
 const userCreator = async (req, res) => {
-    const {username, name, email, password} = req.body;
+    const {username, name, adresse, email, nonHashedPassword} = req.body;
+    if (!username || typeof username !== "string") {
+      return res.json({status: "error", error: "Invalid username."})
+    }
+    if (!password || password.length < 6) {
+      return res.json({status: "error", error: "Password length require at least 6 characters."})
+    }
+    try {
+        const password = await bcrypt.hash(nonHashedPassword, 10);
 
-    try{
-        const user = await User.create({username, name, email, password});
+        const user = await User.create({username, name, adresse, email, password});
         res.status(200).json({status: "ok"});
     } catch (error) {
+        if (error.code === 11000) {
+          return res.json({status: "error", error: "Username already in use."})
+        }
         console.log(error.message);
-        res.json({status: "error", error: "There was an error while creating this user"})
+        res.json({status: "error", error: "There was an error while creating this user"});
     }
 }
 
@@ -94,8 +107,31 @@ const setAdmin = async (req, res) => {
         res.status(200).json({status: "ok"});
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({status: "error", error: "There was an error while updating the use"})
+        res.status(500).json({status: "error", error: "There was an error while updating the use"});
     }
+}
+
+const logging = async (req, res) => {
+  const {username, password} = req.body;
+  const user = await User.findOne({username: username}).lean();
+  if (!user) {
+    return res.status(404).json({status: "error", error: "No such user"});
+  }
+  try {
+    if (!await bcrypt.compare(password, user.password)) {
+      return res.json({status: "error", error: "Password incorrect"});
+    }
+    const token = jwt.sign({
+      id: user._id,
+      username: user.username,
+      admin: user.admin
+    }, process.env.ACCESS_TOKEN_SECRET);
+    res.json({status: "ok", data: token, admin: user.admin});
+
+  } catch(error) {
+    console.log(error.message);
+    res.status(500).json({status: "error", error: "There was an error while updating the use"});
+  }
 }
 
 module.exports = {
@@ -104,5 +140,6 @@ module.exports = {
     userFinder,
     userDeletor,
     userUpdater,
-    setAdmin
+    setAdmin,
+    logging
 };

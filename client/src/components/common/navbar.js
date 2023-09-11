@@ -1,8 +1,12 @@
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
+import {useLogout} from './../../hooks/useLogout';
+import {useAuthContext} from './../../hooks/useAuthContext';
 
 export default function Navbar() {
+  const {user} = useAuthContext();
+  const {logout} = useLogout();
   const [prodsInCart, setProdsInCart] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +34,10 @@ export default function Navbar() {
     fetchData();
   }, [prodsInCart])
 
+    const handleLogout = () => {
+      logout();
+    }
+
     return (
         <nav className="navbar navbar-expand-md py-4 navbar-light bg-light shadow">
             <div className="container">
@@ -52,9 +60,6 @@ export default function Navbar() {
                 </div>
                 <div className="order-cstm-1">
                     <button className="btn position-relative">
-                        <i className="fa fa-search"></i>
-                    </button>
-                    <button className="btn position-relative">
                         <i className="fa fa-shopping-cart"></i>
                         <span className="badge primary-color start-100 top-0 position-absolute translate-middle">
                           {loading ? (
@@ -65,9 +70,20 @@ export default function Navbar() {
                           }
                         </span>
                     </button>
-                    <button className="btn position-relative">
-                        <Link to="/dashboard" className="nav-link"><i className="fa fa-user"></i></Link>
-                    </button>
+                    {user ? (
+                      <>
+                      <button className="btn position-relative">
+                          <Link to="/dashboard" className="nav-link"><i className="fa fa-user"></i></Link>
+                      </button>
+                      <button className="btn position-relative" onClick={handleLogout}>
+                        <i className="fa fa-sign-out"></i>
+                      </button>
+                      </>
+                    ) : (
+                      <button className="btn position-relative">
+                          <Link to="/login" className="nav-link"><i className="fa fa-user"></i></Link>
+                      </button>
+                    )}
                 </div>
             </div>
         </nav>
