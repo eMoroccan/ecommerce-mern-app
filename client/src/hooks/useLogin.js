@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import jwt from 'jwt-decode'
 
 export const useLogin = () => {
-  const {user} = useAuthContext();
   const {isAdmin} = useAuthContext();
   const [error, setError] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -23,15 +22,19 @@ export const useLogin = () => {
       const res = await axios.post('/api/users/login', body);
 
       if (res.data.status === "ok") {
+        setError(null);
         localStorage.setItem('user', res.data.data);
         const userDecoded = jwt(res.data.data);
         dispatch({type: 'LOGIN', payload: res})
         dispatch({ type: 'SET_ADMIN', payload: userDecoded.admin });
         setLoader(false);
-        if (isAdmin === true) {
+        if (isAdmin) {
           navigate('/dashboard');
-        } else {
-          navigate('/');
+        } else if (!isAdmin) {
+          const res1 = await axios.post('/api/carts/create/'+ userDecoded.id);
+          if (res1.data.status === "error") {
+            navigate('/account');
+          } 
         }
       } else {
         setLoader(false);
@@ -39,7 +42,7 @@ export const useLogin = () => {
       }
     } catch(error) {
       setLoader(false);
-      setError("There is no such account");
+      navigate('/account');
     }
   }
   return ({login, loader, error});

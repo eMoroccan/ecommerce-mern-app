@@ -1,19 +1,22 @@
 import axios from 'axios';
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
+import { useAuthContext } from '../../../hooks/useAuthContext';
+import jwt from 'jwt-decode';
 
 export default function ShowcaseCard({prodId, productSlug, productImg, productName, productPrice}) {
-  const user = "ku"
+  const {user} = useAuthContext();
+  const userData = jwt(user);
   const [loading, setLoading] = useState(false);
   const onClickHandler = async () => {
     setLoading(true);
     const data = {
       "prod": {
-        "product": prodId,
+        "_id": prodId,
         "quantity": 1
       }
     }
-    await axios.patch("/api/carts/add-to/" + user, data)
+    await axios.patch("/api/carts/add-to/" + userData.id, data)
       .then(res => {
           setLoading(false);
           alert(res.status)

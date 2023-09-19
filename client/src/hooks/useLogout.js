@@ -6,9 +6,10 @@ export const useLogout = () => {
   const navigate = useNavigate();
 
   const logout = () => {
+    navigate('/');
     localStorage.removeItem('user');
     dispatch({type: 'LOGOUT'})
-    navigate('/');
+    
   }
   return {logout};
 }

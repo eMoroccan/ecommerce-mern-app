@@ -2,10 +2,8 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useLogout} from './../../hooks/useLogout';
-import {useAuthContext} from './../../hooks/useAuthContext';
 
-export default function Navbar() {
-  const {user} = useAuthContext();
+export default function Navbar({user}) {
   const {logout} = useLogout();
   const [prodsInCart, setProdsInCart] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -14,8 +12,8 @@ export default function Navbar() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('/api/carts/get-products/ku');
-        const data = res.data.flat();
+        const res = await axios.get('/api/carts/get-products/' + user.id);
+        const data = res.data[0];
         let count = 0;
 
         data.forEach(prod => {
