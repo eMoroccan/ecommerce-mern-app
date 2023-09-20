@@ -3,7 +3,7 @@ import {Multiselect} from 'multiselect-react-dropdown';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function ProductForm() {
+export default function ProductForm({token}) {
     const [loader, setLoader] = useState(false);
     const [alert, setAlert] = useState(false);
     const [error, setError] = useState(false);
@@ -51,7 +51,11 @@ export default function ProductForm() {
         }
         try {
             setLoader(true);
-            const res = await axios.post('/api/products/create', req);
+            const res = await axios.post('/api/products/create', req, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+            });
             if (res.data.status === "ok") {
                 setAlert(true);
                 setTimeout(() => {

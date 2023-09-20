@@ -3,6 +3,7 @@ const User = require('../models/user-schema');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Cart = require('../models/cart-schema');
 
 const listUsers = async (req, res) => {
     const users = await User.find({admin: false});
@@ -34,13 +35,19 @@ const userCreator = async (req, res) => {
     if (!username || typeof username !== "string") {
       return res.json({status: "error", error: "Invalid username."})
     }
-    if (!password || password.length < 6) {
+    if (!nonHashedPassword) {
       return res.json({status: "error", error: "Password length require at least 6 characters."})
     }
     try {
         const password = await bcrypt.hash(nonHashedPassword, 10);
 
         const user = await User.create({username, name, adresse, email, password});
+
+        const cart = new Cart({
+            customerId: user._id,
+          });
+      
+        await cart.save();
         res.status(200).json({status: "ok"});
     } catch (error) {
         if (error.code === 11000) {
@@ -130,7 +137,7 @@ const logging = async (req, res) => {
 
   } catch(error) {
     console.log(error.message);
-    res.status(500).json({status: "error", error: "There was an error while updating the use"});
+    res.status(500).json({status: "error", error: "There was an error while logging."});
   }
 }
 

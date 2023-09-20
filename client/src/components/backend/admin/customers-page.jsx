@@ -1,14 +1,18 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 
-export default function Customers() {
+export default function Customers({token}) {
     const [customers, setCustomers] = useState([]);
     const [loader, setLoader] = useState(false);
     
     useEffect(() => {
         async function fetchCustomers() {
             setLoader(true);
-            const res = await axios.get('/api/users/get-all');
+            const res = await axios.get('/api/users/get-all', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+            });
             setCustomers(res.data);
             setLoader(false);
         }

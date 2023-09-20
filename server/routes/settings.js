@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const {createSettings, generalUpdate, faviconUpdate, getSettings} = require('./../controllers/settings-controller');
+const requireAuth = require('../middleware/auth.js');
+
+router.use(requireAuth);
 
 router.use(express.json());
 

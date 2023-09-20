@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const {createOrder, removeOrder, updateOrder, getOrder, getOrders} = require("./../controllers/orders-controller");
+const requireAuth = require('../middleware/auth.js');
+
+router.use(requireAuth);
 
 router.use(express.json());
 

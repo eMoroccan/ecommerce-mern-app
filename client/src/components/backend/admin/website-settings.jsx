@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
-export default function Settings() {
+export default function Settings({token}) {
     const [settings, setSettings] = useState({});
 
     const [sitename, setSitename] = useState("");
@@ -28,7 +28,11 @@ export default function Settings() {
         description: description
       };
       try {
-        const res = await axios.patch('/api/settings/general-update', req);
+        const res = await axios.patch('/api/settings/general-update', req, {
+            headers: {
+                Authorization: `Bearer ${token}`
+              }
+        });
         if (res.data.status === "ok") {
           alert("Settings updated successfully");
         } else {
@@ -44,7 +48,11 @@ export default function Settings() {
         favicon: favicon,
       };
       try {
-        const res = await axios.patch('/api/settings/favicon-update', req);
+        const res = await axios.patch('/api/settings/favicon-update', req, {
+            headers: {
+                Authorization: `Bearer ${token}`
+              }
+        });
         if (res.data.status === "ok") {
           alert("Website' favicon updated successfully");
         } else {
@@ -56,7 +64,11 @@ export default function Settings() {
     }
 
     async function retrievingSettings() {
-      const res = await axios.get('/api/settings/get');
+      const res = await axios.get('/api/settings/get', {
+        headers: {
+            Authorization: `Bearer ${token}`
+          }
+      });
       if (res.data.status !== "error") {
         setSettings(res.data);
       }

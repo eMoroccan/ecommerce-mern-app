@@ -1,13 +1,14 @@
 import {useState} from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
-export default function RegisterPage() {
+export default function RegisterPage({token}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [adresse, setAdresse] = useState("");
+  const navigate = useNavigate(); 
 
   function handleChange(event, setter) {
     setter(event.target.value);
@@ -23,15 +24,20 @@ export default function RegisterPage() {
         email: email,
         nonHashedPassword: password
       }
-      const res = await axios.post('/api/users/create', body);
+      const res = await axios.post('/api/users/create', body, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
       if (res.data.status === "ok") {
         alert("Account created successfully");
+        navigate('/login')
       } else {
         alert(res.data.error);
       }
     } catch(error) {
-      alert("There was an error while creatin the account");
+      alert("There was an error while creating the account");
     }
   }
   return (
@@ -44,7 +50,7 @@ export default function RegisterPage() {
           <label htmlFor="username">Username</label>
         </div>
         <div className="form-floating">
-          <input type="password" className="form-control mb-3" id="name" required placeholder="Full name" value={name} onChange={event => handleChange(event, setName)} />
+          <input type="text" className="form-control mb-3" id="name" required placeholder="Full name" value={name} onChange={event => handleChange(event, setName)} />
           <label htmlFor="name">Full name</label>
         </div>
         <div className="form-floating">
@@ -52,11 +58,11 @@ export default function RegisterPage() {
           <label htmlFor="Email">Email</label>
         </div>
         <div className="form-floating">
-          <input type="password" className="form-control mb-3" id="adresse" required placeholder="Adresse" value={adresse} onChange={event => handleChange(event, setAdresse)} />
+          <input type="text" className="form-control mb-3" id="adresse" required placeholder="Adresse" value={adresse} onChange={event => handleChange(event, setAdresse)} />
           <label htmlFor="adresse">Adresse</label>
         </div>
         <div className="form-floating">
-          <input type="password" className="form-control mb-3" id="password" required placeholder="Password" value={password} onChange={event => handleChange(event, setPassword)} />
+          <input type="password" min="6" className="form-control mb-3" id="password" required placeholder="Password" value={password} onChange={event => handleChange(event, setPassword)} />
           <label htmlFor="password">Password</label>
         </div>
         <div className="text-center my-3">

@@ -1,14 +1,22 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Account({ user }) {
     const [datax, setData] = useState([]);
     const [prods, setProds] = useState([]);
+    const navigate = useNavigate();
+    const [loader, setLoader] = useState(false);
 
     useEffect(() => {
+        if (!user.id) {
+            navigate("/login");
+        } else {
+
+   
         async function getCartProducts() {
             try {
+                setLoader(true);
                 const res = await axios.get('/api/carts/get-products/' + user.id);
                 const products = res.data[0];
                 const aggregatedData = aggregateProductIds(products);
@@ -19,6 +27,7 @@ export default function Account({ user }) {
         }
 
         getCartProducts();
+        }
     }, [user.id]);
 
     useEffect(() => {
@@ -34,6 +43,7 @@ export default function Account({ user }) {
                     quantity: datax[index].quantity
                 }));
                 setProds(updatedProds);
+                setLoader(false);
             } catch (error) {
                 console.error('Error fetching product data:', error);
             }
@@ -62,7 +72,7 @@ export default function Account({ user }) {
     }
 
     return (
-        <div className="container">
+        <div className="container" style={{minHeight: "100vh"}}>
             <div className="container my-3 pt-3">
                 <div className="pb-3"><Link to="/" className="text-decoration-none">Home</Link><span className='text-capitalize'> / Account</span></div>
             </div>
@@ -73,27 +83,36 @@ export default function Account({ user }) {
                 <div className="col-md-8">
                     <h3>My Cart & Orders</h3>
                     <hr />
-                    {prods.map((product, index) => (
-                        <div key={index}>
-                            <div class="d-flex justify-content-between pe-5">
-                            <div class="">
-                                <div class="d-flex justify-content-between gap-2">
-                                    <div class="thumbnail border border-divider p-1 rounded">
-                                        <img style={{maxWidth:"6rem"}} src={product.productData.cover} alt={product.productData.title} />
-                                    </div>
-                                    <div class="order-item-info">
-                                        <div class="order-item-name font-semibold">{product.productData.title}</div>
-                                        <div class="order-item-qty" style={{fontSize:"0.9em"}}>{product.quantity} x ${product.productData.price}</div>
+                    {loader ? (
+                            <div className="d-flex justify-content-center align-items-center" style={{ height: "200px" }}>
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                            </div>
-                                    <div class="order-total col-span-1">
-                                    <div class="order-total-value font-bold">Total: ${product.productData.price * product.quantity}</div>
+                        ) : (
+                        prods.map((product, index) => (
+                            <div key={index}>
+                                <div class="d-flex justify-content-between pe-5">
+                                <div class="">
+                                    <div class="d-flex justify-content-between gap-2">
+                                        <div class="thumbnail border border-divider p-1 rounded">
+                                            <img style={{maxWidth:"6rem"}} src={product.productData.cover} alt={product.productData.title} />
+                                        </div>
+                                        <div class="order-item-info">
+                                            <div class="order-item-name font-semibold">{product.productData.title}</div>
+                                            <div class="order-item-qty" style={{fontSize:"0.9em"}}>{product.quantity} x ${product.productData.price}</div>
+                                        </div>
+                                    </div>
                                 </div>
+                                        <div class="order-total col-span-1">
+                                        <div class="order-total-value font-bold">Total: ${product.productData.price * product.quantity}</div>
+                                    </div>
+                                </div>
+                                <hr />
                             </div>
-                            <hr />
-                        </div>
-                    ))}
+                        )))}
+                    
+                    
                 </div>
                 <div className="col-md-4">
                     <h3>Account details</h3>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function OrdersPage() {
+export default function OrdersPage({token}) {
     const [orders, setOrders] = useState([]);
     const [loader, setLoader] = useState(false);
 
@@ -14,7 +14,11 @@ export default function OrdersPage() {
     }
 
     async function getCustomer(customerId) {
-        const res = await axios.get('/api/users/get-id/' + customerId);
+        const res = await axios.get('/api/users/get-id/' + customerId, {
+            headers: {
+                Authorization: `Bearer ${token}`
+              }
+        });
         const data = res.data;
         return (data.name);
     }
@@ -22,7 +26,11 @@ export default function OrdersPage() {
     useEffect(() => {
         const orders = async () => {
             setLoader(true);
-            var response = await axios.get('/api/orders/get-all');
+            var response = await axios.get('/api/orders/get-all', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+            });
             const data = response.data;
             const ordersWithCustomerNames = await Promise.all(
                 data.map(async (order) => {

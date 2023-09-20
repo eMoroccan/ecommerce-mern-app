@@ -21,28 +21,21 @@ export const useLogin = () => {
       }
       const res = await axios.post('/api/users/login', body);
 
-      if (res.data.status === "ok") {
+    
         setError(null);
         localStorage.setItem('user', res.data.data);
         const userDecoded = jwt(res.data.data);
-        dispatch({type: 'LOGIN', payload: res})
-        dispatch({ type: 'SET_ADMIN', payload: userDecoded.admin });
+        console.log(res);
+        dispatch({type: 'LOGIN', payload: res.data.data})
         setLoader(false);
         if (isAdmin) {
           navigate('/dashboard');
-        } else if (!isAdmin) {
-          const res1 = await axios.post('/api/carts/create/'+ userDecoded.id);
-          if (res1.data.status === "error") {
-            navigate('/account');
-          } 
+        } else {
+          navigate('/account');
         }
-      } else {
-        setLoader(false);
-        setError(res.data.error);
-      }
+      
     } catch(error) {
-      setLoader(false);
-      navigate('/account');
+      console.log(error.message);
     }
   }
   return ({login, loader, error});

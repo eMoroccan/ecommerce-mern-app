@@ -16,6 +16,7 @@ import RegisterPage from './components/frontend/login-register/register-page';
 import jwt from 'jwt-decode';
 import { useAuthContext } from './hooks/useAuthContext';
 import Account from './components/backend/user/account-page';
+import './config';
 
 function App() {
   const navigate = useNavigate();
@@ -40,15 +41,15 @@ function App() {
         <Route path='/kids' element={<ShopPage />} />
         <Route path='/:slug' element={<ProductPage />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/register' element={<RegisterPage token={global.config.ACCESS_TOKEN} />} />
         <Route path='/account' element={<Account user={userData} />} />
         <Route path='/dashboard' element={<Sidebar />}>
-          <Route path="" element={<Dashboard user={userData} />} />
-          <Route path="orders" element={<OrdersPage />} />
+          <Route path="" element={<Dashboard user={userData} token={global.config.ACCESS_TOKEN} />} />
+          <Route path="orders" element={<OrdersPage token={global.config.ACCESS_TOKEN} />} />
           <Route path="manage-products" element={<ProductsManage />} />
-          <Route path="customers" element={<Customers />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="manage-products/new" element={<ProductForm />} />
+          <Route path="customers" element={<Customers />} token={global.config.ACCESS_TOKEN} />
+          <Route path="settings" element={<Settings token={global.config.ACCESS_TOKEN} />} />
+          <Route path="manage-products/new" element={<ProductForm token={global.config.ACCESS_TOKEN} />} />
         </Route>
       </Routes>
       <Footer />

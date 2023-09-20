@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Dashboard({user}) {
+export default function Dashboard({user, token}) {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         async function fetchOrders() {
-            const response = await axios.get('/api/orders/get-all');
+            const response = await axios.get('/api/orders/get-all', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+            });
             setOrders(response.data);
         }
 
