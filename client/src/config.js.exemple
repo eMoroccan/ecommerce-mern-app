@@ -1,0 +1,3 @@
+module.exports = global.config = {
+    ACCESS_TOKEN: (The same one as the ACCESS_TOKEN_SECRET in the client directory),
+}
